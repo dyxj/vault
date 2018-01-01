@@ -8,6 +8,7 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"strconv"
 	"vault/crypt"
 )
 
@@ -45,6 +46,16 @@ func encryptFunc(w http.ResponseWriter, req *http.Request) {
 
 	if req.Method == http.MethodPost {
 		// Ensure http post
+
+		// Compare keys1 and keys2
+		key1 := req.FormValue("cryptKey1")
+		key2 := req.FormValue("cryptKey2")
+		if key1 != key2 {
+			// Keys do not match
+			jsonErrorResponse("Keys do not match", http.StatusOK, w)
+			return
+		}
+
 		// Get file from form
 		f, fh, err := req.FormFile("usrfile")
 		if err != nil {
@@ -56,12 +67,12 @@ func encryptFunc(w http.ResponseWriter, req *http.Request) {
 		defer f.Close()
 
 		// Header stuff
-		// Check name etc
+		cType := fh.Header.Get("Content-Type")
 		fmt.Println(fh)
 		fmt.Println(fh.Filename)
-		cType := fh.Header.Get("Content-Type")
 		fmt.Println(cType)
 
+		// Read all bytes
 		bArr, err := ioutil.ReadAll(f)
 		if err != nil {
 			log.Println(err)
@@ -71,12 +82,26 @@ func encryptFunc(w http.ResponseWriter, req *http.Request) {
 		}
 		fmt.Println(bArr)
 
+		// Generate 32 byte key
+		keyE := crypt.HashTo32Bytes([]byte(key1))
+
+		// Encrypt bytes
+		encArr, err := crypt.EncryptBytes(bArr, keyE)
+		if err != nil {
+			log.Println(err)
+			http.Error(w, "Error occured while encrypting file",
+				http.StatusInternalServerError)
+			return
+		}
+		cntLength := strconv.Itoa(len(encArr))
+		w.Header().Set("Content-Disposition", "attachment; filename="+fh.Filename)
+		w.Header().Set("Content-Length", cntLength)
+		w.Write(encArr)
 	} else {
 		// Error 405
 		jsonErrorResponse("Method not allowed", http.StatusMethodNotAllowed, w)
 		return
 	}
-
 }
 
 func decryptFunc(w http.ResponseWriter, req *http.Request) {
