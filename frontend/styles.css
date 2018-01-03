@@ -20,6 +20,9 @@ body {
 
 .card {
     z-index: 1;
+    width: auto;
+    /* min-width: 600px; */
+    max-width: 600px;
 }
 
 .file-mod::after {    
@@ -33,9 +36,9 @@ body {
     height: calc(calc(2.25rem + 2px) - 1px * 2);
     padding: .375rem .75rem;
     line-height: 1.5;
-    color: #495057;
+    color: #fff;
     content: "Browse";
-    background-color: #e9ecef;
+    background-color: #343a40;;
     border-right: 1px solid #ced4da;
     border-left: 0;
     border-radius: 0 .25rem .25rem 0;
