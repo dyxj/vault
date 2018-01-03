@@ -133,10 +133,14 @@ func decryptFunc(w http.ResponseWriter, req *http.Request) {
 		// Decrypt bytes
 		decArr, err := crypt.DecryptBytes(bArr, keyE)
 		if err != nil {
-			log.Println(err)
-			http.Error(w, "Error occured while decrypting file",
-				http.StatusInternalServerError)
-			return
+			if err.Error() == "cipher: message authentication failed" {
+				jsonErrorResponse("authentication failed", http.StatusUnprocessableEntity, w)
+			} else {
+				log.Println(err)
+				http.Error(w, "Error occured while decrypting file",
+					http.StatusInternalServerError)
+				return
+			}
 		}
 		cntLength := strconv.Itoa(len(decArr))
 		w.Header().Set("Content-Disposition",
