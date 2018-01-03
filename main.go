@@ -18,14 +18,8 @@ const (
 func main() {
 	http.HandleFunc("/encrypt", encryptFunc)
 	http.HandleFunc("/decrypt", decryptFunc)
-	http.HandleFunc("/", getPage)
+	http.Handle("/", http.FileServer(http.Dir("./frontend")))
 	http.ListenAndServe(":8080", nil)
-}
-
-// Change cryptkey to password
-func getPage(w http.ResponseWriter, req *http.Request) {
-	w.Header().Set("CONTENT-TYPE", "text/html; charset=UTF-8")
-	fmt.Fprintf(w, defPageConst)
 }
 
 func encryptFunc(w http.ResponseWriter, req *http.Request) {
@@ -42,7 +36,7 @@ func encryptFunc(w http.ResponseWriter, req *http.Request) {
 		key2 := req.FormValue("cryptKey2")
 		if key1 != key2 {
 			// Keys do not match
-			jsonErrorResponse("Keys do not match", http.StatusOK, w)
+			jsonErrorResponse("Keys do not match", http.StatusUnprocessableEntity, w)
 			return
 		}
 
@@ -50,7 +44,7 @@ func encryptFunc(w http.ResponseWriter, req *http.Request) {
 		f, fh, err := req.FormFile("usrfile")
 		if err != nil {
 			log.Println(err)
-			http.Error(w, "Error uploading file",
+			http.Error(w, "Error receiving file",
 				http.StatusInternalServerError)
 			return
 		}
@@ -83,7 +77,9 @@ func encryptFunc(w http.ResponseWriter, req *http.Request) {
 		cntLength := strconv.Itoa(len(encArr))
 		w.Header().Set("Content-Disposition",
 			"attachment; filename="+newFname)
+		w.Header().Set("Content-Type", "application/octet-stream")
 		w.Header().Set("Content-Length", cntLength)
+		w.Header().Set("X-File-Name", newFname)
 		w.Write(encArr)
 	} else {
 		// Error 405
@@ -115,7 +111,7 @@ func decryptFunc(w http.ResponseWriter, req *http.Request) {
 		fnameArr := strings.Split(fh.Filename, ".")
 		if fnameArr[len(fnameArr)-1] != encryptExt {
 			// Keys do not match
-			jsonErrorResponse("Invalid file type", http.StatusOK, w)
+			jsonErrorResponse("Invalid file type", http.StatusUnprocessableEntity, w)
 			return
 		}
 		fnameArr = fnameArr[:len(fnameArr)-1]
@@ -138,14 +134,16 @@ func decryptFunc(w http.ResponseWriter, req *http.Request) {
 		decArr, err := crypt.DecryptBytes(bArr, keyE)
 		if err != nil {
 			log.Println(err)
-			http.Error(w, "Error occured while encrypting file",
+			http.Error(w, "Error occured while decrypting file",
 				http.StatusInternalServerError)
 			return
 		}
 		cntLength := strconv.Itoa(len(decArr))
 		w.Header().Set("Content-Disposition",
 			"attachment; filename="+oriFname)
+		w.Header().Set("Content-Type", "application/octet-stream")
 		w.Header().Set("Content-Length", cntLength)
+		w.Header().Set("X-File-Name", oriFname)
 		w.Write(decArr)
 	} else {
 		// Error 405

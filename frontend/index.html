@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/css/bootstrap.min.css" integrity="sha384-Zug+QiDoJOrZ5t4lssLdxGhVrurbmBWopoEl+M6BdEfwnCJZtKxi1KgxUyJq13dy"
+        crossorigin="anonymous">
+    <link rel="stylesheet" href="./styles.css">
+    <title>FileEncrypt</title>
+</head>
+
+<body>
+    <div class="alert alert-danger error-alert" role="alert" id="error-alert" style="display:none">
+        Alert!
+    </div>
+    <div class="container">
+        <div class="row align-items-center" style="height:80vh;">
+            <div class="col" style="text-align:center;">
+                <!-- Encrypt Card -->
+                <div class="card mx-auto" style="width: 50rem;">
+                    <div class="card-body">
+                        <h5 class="card-title">Upload a file to encrypt</h5>
+                        <div class="form-group">
+                            <div class="custom-file">
+                                <input type="file" class="custom-file-input" id="enFile">
+                                <label class="custom-file-label file-mod" for="enFile">Choose file</label>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="enKey1" class="col-sm-2 col-form-label">Password</label>
+                            <div class="col-sm-10">
+                                <input type="password" class="form-control" id="enKey1" placeholder="Password">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="enKey2" class="col-sm-2 col-form-label">Confirm Password</label>
+                            <div class="col-sm-10">
+                                <input type="password" class="form-control" id="enKey2" placeholder="Confirm Password">
+                            </div>
+                        </div>
+                        <button type="button" class="btn btn-primary" id="enbtn">Encrypt</button>
+                    </div>
+                </div>
+                <!-- Encrypt Card End -->
+                <br>
+                <!-- Decrypt Card -->
+                <div class="card mx-auto" style="width: 50rem;">
+                    <div class="card-body">
+                        <h5 class="card-title">Upload a file to decrypt</h5>
+                        <div class="form-group">
+                            <div class="custom-file">
+                                <input type="file" class="custom-file-input" id="deFile">
+                                <label class="custom-file-label file-mod" for="deFile">Choose file</label>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="enKey1" class="col-sm-2 col-form-label">Password</label>
+                            <div class="col-sm-10">
+                                <input type="password" class="form-control" id="deKey1" placeholder="Password">
+                            </div>
+                        </div>
+                        <button type="button" class="btn btn-primary" id="debtn">Decrypt</button>
+                    </div>
+                </div>
+                <!-- Decrypt Card End -->
+            </div>
+        </div>
+    </div>
+    <!--container end-->
+    <!-- Particle js selector -->
+    <canvas class="background"></canvas>
+    <!-- js libs -->
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script type="text/javascript" src="./particles.js"></script>
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/js/bootstrap.min.js" integrity="sha384-a5N7Y/aK3qNeh15eJKGWxsqtnX/wWdSZSKp+81YjTmS15nvnvxKHuzaWwXHDli+4"
+        crossorigin="anonymous"></script>
+    <!-- js libs end -->
+    <script type="text/javascript" src="./app.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,42 @@
+html,
+body {
+    margin: 0;
+    padding: 0;
+}
+
+.background {
+    position: absolute;
+    display: block;
+    top: 0;
+    left: 0;
+    z-index: 0;
+}
+
+.error-alert {
+    position: absolute;
+    width: 100%;
+    text-align: center;
+}
+
+.card {
+    z-index: 1;
+}
+
+.file-mod::after {    
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: auto;
+    bottom: 0;
+    z-index: 3;
+    display: block;
+    height: calc(calc(2.25rem + 2px) - 1px * 2);
+    padding: .375rem .75rem;
+    line-height: 1.5;
+    color: #495057;
+    content: "Browse";
+    background-color: #e9ecef;
+    border-right: 1px solid #ced4da;
+    border-left: 0;
+    border-radius: 0 .25rem .25rem 0;
+}
