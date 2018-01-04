@@ -16,6 +16,7 @@ const (
 
 // Temporary test area for file encryptions service
 func main() {
+	fmt.Println("Vault Start")
 	http.HandleFunc("/encrypt", encryptFunc)
 	http.HandleFunc("/decrypt", decryptFunc)
 	http.Handle("/", http.FileServer(http.Dir("./frontend")))
