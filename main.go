@@ -8,6 +8,8 @@ import (
 	"strconv"
 	"strings"
 	"vault/crypt"
+
+	"golang.org/x/crypto/acme/autocert"
 )
 
 const (
@@ -20,7 +22,16 @@ func main() {
 	http.HandleFunc("/encrypt", encryptFunc)
 	http.HandleFunc("/decrypt", decryptFunc)
 	http.Handle("/", http.FileServer(http.Dir("./frontend")))
-	http.ListenAndServe(":8080", nil)
+
+	m := &autocert.Manager{
+		Prompt:     autocert.AcceptTOS,
+		HostPolicy: autocert.HostWhitelist("darrenyxj.com"),
+		Cache:      autocert.DirCache("golang-autocert"),
+	}
+
+	log.Fatal(http.Serve(m.Listener(), nil))
+
+	// http.ListenAndServe(":8080", nil)
 }
 
 func encryptFunc(w http.ResponseWriter, req *http.Request) {
