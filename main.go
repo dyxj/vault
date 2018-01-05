@@ -43,7 +43,7 @@ func main() {
 }
 
 func redirectToHTTPS(w http.ResponseWriter, req *http.Request) {
-	http.Redirect(w, req, req.Host+req.RequestURI, http.StatusMovedPermanently)
+	http.Redirect(w, req, req.Host+":443"+req.RequestURI, http.StatusMovedPermanently)
 }
 
 func encryptFunc(w http.ResponseWriter, req *http.Request) {
