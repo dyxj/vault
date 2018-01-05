@@ -39,7 +39,7 @@ func main() {
 
 	go log.Fatal(server.ListenAndServeTLS("", ""))
 
-	log.Fatal(http.ListenAndServe(":80", nil))
+	log.Fatal(http.ListenAndServe(":80", http.HandlerFunc(redirectToHTTPS)))
 }
 
 func redirectToHTTPS(w http.ResponseWriter, req *http.Request) {
