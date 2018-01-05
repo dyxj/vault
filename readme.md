@@ -1,0 +1,1 @@
+sudo docker run -it --publish 80:80 -p 443:443 --name vaulttest --rm -v ~/dvolumes/vault/vault-autocert:/go/src/vault/vault-autocert  vaultgo:latest
