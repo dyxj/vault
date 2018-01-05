@@ -1,6 +1,7 @@
 package main
 
 import (
+	"crypto/tls"
 	"fmt"
 	"io/ioutil"
 	"log"
@@ -23,15 +24,26 @@ func main() {
 	http.HandleFunc("/decrypt", decryptFunc)
 	http.Handle("/", http.FileServer(http.Dir("./frontend")))
 
-	m := &autocert.Manager{
+	cm := &autocert.Manager{
 		Prompt:     autocert.AcceptTOS,
 		HostPolicy: autocert.HostWhitelist("darrenyxj.com"),
-		Cache:      autocert.DirCache("golang-autocert"),
+		Cache:      autocert.DirCache("vault-autocert"),
 	}
 
-	log.Fatal(http.Serve(m.Listener(), nil))
+	server := &http.Server{
+		Addr: ":443",
+		TLSConfig: &tls.Config{
+			GetCertificate: cm.GetCertificate,
+		},
+	}
 
-	// http.ListenAndServe(":8080", nil)
+	go log.Fatal(server.ListenAndServeTLS("", ""))
+
+	log.Fatal(http.ListenAndServe(":80", nil))
+}
+
+func redirectToHTTPS(w http.ResponseWriter, req *http.Request) {
+	http.Redirect(w, req, req.Host+req.RequestURI, http.StatusMovedPermanently)
 }
 
 func encryptFunc(w http.ResponseWriter, req *http.Request) {
