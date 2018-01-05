@@ -43,6 +43,8 @@ func main() {
 }
 
 func redirectToHTTPS(w http.ResponseWriter, req *http.Request) {
+	fmt.Println("Redirect")
+	fmt.Println("https://" + req.Host + req.RequestURI)
 	http.Redirect(w, req, "https://"+req.Host+req.RequestURI, http.StatusMovedPermanently)
 }
 
