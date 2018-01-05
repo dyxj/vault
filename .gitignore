@@ -2,3 +2,4 @@ debug
 debug.test
 *.code-workspace
 *.exe
+*autocert
