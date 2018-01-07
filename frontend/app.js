@@ -3,6 +3,7 @@ document.addEventListener('DOMContentLoaded', function () {
         selector: '.background',
         maxParticles: 150,
         sizeVariations: 5,
+	speed:1
     });
 
     var eBtn = document.getElementById("enbtn");
