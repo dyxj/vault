@@ -24,9 +24,11 @@ func main() {
 	http.HandleFunc("/decrypt", decryptFunc)
 	http.Handle("/", http.FileServer(http.Dir("./frontend")))
 
+	domains := []string{"darrenyxj.com", "file.darrenyxj.com"}
+
 	cm := &autocert.Manager{
 		Prompt:     autocert.AcceptTOS,
-		HostPolicy: autocert.HostWhitelist("darrenyxj.com"),
+		HostPolicy: autocert.HostWhitelist(domains...),
 		Cache:      autocert.DirCache("vault-autocert"),
 	}
 
