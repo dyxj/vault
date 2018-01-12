@@ -13,10 +13,10 @@
 
 FROM golang:1.8.5
 
-ADD . /usr/app/vault
+ADD . /go/src/vault
 
-WORKDIR /usr/app/vault
+WORKDIR /go/src/vault
 
-RUN go build ./
+# RUN go build ./
 
-CMD ["./vault"]
+# CMD ["./vault"]

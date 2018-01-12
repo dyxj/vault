@@ -1,6 +1,6 @@
-version: '3'
-services:
-  webapp:
-    build: ./
-    volumes: 
-      - ./vault-autocert:./vault-autocert
+# version: '3'
+# services:
+#   webapp:
+#     build: ./
+#     volumes: 
+#       - ./vault-autocert:./vault-autocert
