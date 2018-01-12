@@ -3,47 +3,65 @@ package main
 import (
 	"crypto/tls"
 	"fmt"
+	"golang.org/x/crypto/acme/autocert"
 	"io/ioutil"
 	"log"
 	"net/http"
 	"strconv"
 	"strings"
 	"vault/crypt"
-
-	"golang.org/x/crypto/acme/autocert"
 )
 
 const (
 	encryptExt = "crypt"
 )
 
-// Temporary test area for file encryptions service
+var (
+	macEnv = "dev"
+)
+
+func tempTest() {
+	files, err := ioutil.ReadDir("./vault-autocert")
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	for _, file := range files {
+		fmt.Println(file.Name())
+	}
+}
+
 func main() {
 	fmt.Println("Vault Start")
+	tempTest()
+
 	http.HandleFunc("/encrypt", encryptFunc)
 	http.HandleFunc("/decrypt", decryptFunc)
 	http.Handle("/", http.FileServer(http.Dir("./frontend")))
 
-	domains := []string{"darrenyxj.com", "file.darrenyxj.com"}
+	if macEnv == "prod" {
+		domains := []string{"darrenyxj.com", "file.darrenyxj.com"}
+		cm := &autocert.Manager{
+			Prompt:     autocert.AcceptTOS,
+			HostPolicy: autocert.HostWhitelist(domains...),
+			Cache:      autocert.DirCache("vault-autocert"),
+		}
 
-	cm := &autocert.Manager{
-		Prompt:     autocert.AcceptTOS,
-		HostPolicy: autocert.HostWhitelist(domains...),
-		Cache:      autocert.DirCache("vault-autocert"),
+		server := &http.Server{
+			Addr: ":443",
+			TLSConfig: &tls.Config{
+				GetCertificate: cm.GetCertificate,
+			},
+		}
+
+		go func() {
+			log.Fatal(server.ListenAndServeTLS("", ""))
+		}()
+
+		log.Fatal(http.ListenAndServe(":80", http.HandlerFunc(redirectToHTTPS)))
+	} else {
+		log.Fatal(http.ListenAndServe(":80", nil))
 	}
-
-	server := &http.Server{
-		Addr: ":443",
-		TLSConfig: &tls.Config{
-			GetCertificate: cm.GetCertificate,
-		},
-	}
-
-	go func() {
-		log.Fatal(server.ListenAndServeTLS("", ""))
-	}()
-
-	log.Fatal(http.ListenAndServe(":80", http.HandlerFunc(redirectToHTTPS)))
 }
 
 func redirectToHTTPS(w http.ResponseWriter, req *http.Request) {
