@@ -17,7 +17,7 @@ const (
 )
 
 var (
-	macEnv = "dev"
+	macEnv = "prod"
 )
 
 func tempTest() {
@@ -54,11 +54,15 @@ func main() {
 			},
 		}
 
-		go func() {
-			log.Fatal(server.ListenAndServeTLS("", ""))
-		}()
+		go http.ListenAndServe(":80", cm.HTTPHandler(nil))
+		server.ListenAndServeTLS("", "")
 
-		log.Fatal(http.ListenAndServe(":80", http.HandlerFunc(redirectToHTTPS)))
+		// go func() {
+		// 	log.Fatal(server.ListenAndServeTLS("", ""))
+		// }()
+
+		// log.Fatal(http.ListenAndServe(":80", http.HandlerFunc(redirectToHTTPS)))
+
 	} else {
 		log.Fatal(http.ListenAndServe(":80", nil))
 	}

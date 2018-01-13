@@ -1,6 +1,25 @@
-# version: '3'
-# services:
-#   webapp:
-#     build: ./
-#     volumes: 
-#       - ./vault-autocert:./vault-autocert
+version: '3'
+services:
+  webapp:
+    build: ./
+    volumes: 
+      - ~/dvolumes/vault/vault-autocert:/go/src/vault/vault-autocert 
+    ports:
+      - 8080:80
+      - 6060:443
+    environment:
+      - MAC_ENV=development
+    # depends_on:
+    #   - 'mongody'
+
+  
+  # mongody:
+  #   image: mongo:latest    
+  #   environment:
+  #     - MONGO_DATA_DIR=/data/db
+  #     - MONGO_LOG_DIR=/dev/null
+  #   volumes:
+  #     - ~/dvolumes/vault/data/db:/data/db
+  #   ports:
+  #     - 27017:27017
+

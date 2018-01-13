@@ -9,10 +9,10 @@
 			"revisionTime": "2017-07-11T09:57:53Z"
 		},
 		{
-			"checksumSHA1": "TrKJW+flz7JulXU3sqnBJjGzgQc=",
+			"checksumSHA1": "lBWiVnI+9tnYWuXnUiWljDy9dnc=",
 			"path": "golang.org/x/crypto/acme/autocert",
-			"revision": "dd85ac7e6a88fc6ca420478e934de5f1a42dd3c6",
-			"revisionTime": "2017-07-11T09:57:53Z"
+			"revision": "13931e22f9e72ea58bb73048bc752b48c6d4d4ac",
+			"revisionTime": "2018-01-11T11:10:38Z"
 		}
 	],
 	"rootPath": "vault"
