@@ -54,15 +54,10 @@ func main() {
 			},
 		}
 
-		go http.ListenAndServe(":80", cm.HTTPHandler(nil))
-		server.ListenAndServeTLS("", "")
-
-		// go func() {
-		// 	log.Fatal(server.ListenAndServeTLS("", ""))
-		// }()
-
-		// log.Fatal(http.ListenAndServe(":80", http.HandlerFunc(redirectToHTTPS)))
-
+		go func() {
+			log.Fatal(http.ListenAndServe(":80", cm.HTTPHandler(nil)))
+		}()
+		log.Fatal(server.ListenAndServeTLS("", ""))
 	} else {
 		log.Fatal(http.ListenAndServe(":80", nil))
 	}
