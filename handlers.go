@@ -141,8 +141,8 @@ func decryptFunc(w http.ResponseWriter, req *http.Request) {
 				log.Println(err)
 				http.Error(w, "Error occured while decrypting file",
 					http.StatusInternalServerError)
-				return
 			}
+			return
 		}
 
 		// Increment decrypted files count

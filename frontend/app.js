@@ -47,6 +47,7 @@ function getCounts() {
 }
 
 function postEncrypt(data) {
+    $("#feModal").modal("show");
     axios({
         method: 'post',
         url: '/encrypt',
@@ -68,6 +69,7 @@ function postEncrypt(data) {
 }
 
 function postDecrypt(data) {
+    $("#feModal").modal("show");
     axios({
         method: 'post',
         url: '/decrypt',
