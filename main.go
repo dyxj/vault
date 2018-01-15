@@ -36,6 +36,7 @@ func main() {
 	// Define http routes
 	http.HandleFunc("/encrypt", encryptFunc)
 	http.HandleFunc("/decrypt", decryptFunc)
+	http.HandleFunc("/getcounts", getBothCounts)
 	http.Handle("/", http.FileServer(http.Dir("./frontend")))
 
 	// Listen and Serve
@@ -74,12 +75,4 @@ func appInit() {
 	if evMacEnv != "" {
 		macEnv = evMacEnv
 	}
-}
-
-func jsonErrorResponse(errMsg string, statusCode int, w http.ResponseWriter) {
-	jsStr := fmt.Sprintf("{\"error\":\"%s\"}", errMsg)
-
-	w.Header().Add("Content-Type", "application/json")
-	w.WriteHeader(statusCode)
-	w.Write([]byte(jsStr))
 }

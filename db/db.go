@@ -27,16 +27,6 @@ func CloseMainDB() {
 	}
 }
 
-// GetNewDB : Dials a new connection, Used to run test
-func GetNewDB(dbURL string, dbName string) *mgo.Database {
-	sess, err := mgo.Dial(dbURL)
-	if err != nil {
-		panic(err)
-	}
-	mDB := sess.DB(dbName)
-	return mDB
-}
-
 // CopyMainDB : Copy session
 func CopyMainDB() *mgo.Database {
 	return mainDB.Session.Copy().DB(defDB)
@@ -45,4 +35,14 @@ func CopyMainDB() *mgo.Database {
 // CloseDbSession : Close session
 func CloseDbSession(s *mgo.Session) {
 	s.Close()
+}
+
+// GetNewDB : Dials a new connection, Used to run test
+func GetNewDB(dbURL string, dbName string) *mgo.Database {
+	sess, err := mgo.Dial(dbURL)
+	if err != nil {
+		panic(err)
+	}
+	mDB := sess.DB(dbName)
+	return mDB
 }

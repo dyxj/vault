@@ -1,12 +1,16 @@
 package main
 
 import (
+	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
 	"strconv"
 	"strings"
 	"vault/crypt"
+	"vault/db"
+	"vault/models/counts"
 )
 
 func encryptFunc(w http.ResponseWriter, req *http.Request) {
@@ -61,6 +65,16 @@ func encryptFunc(w http.ResponseWriter, req *http.Request) {
 				http.StatusInternalServerError)
 			return
 		}
+
+		// Increment encrypted files count
+		mdb := db.CopyMainDB()
+		defer db.CloseDbSession(mdb.Session)
+		cConn := counts.NewCountConn(mdb)
+		err = cConn.AddCount("encrypt")
+		if err != nil {
+			log.Println("Failed to increment encrypt count", err)
+		}
+
 		cntLength := strconv.Itoa(len(encArr))
 		w.Header().Set("Content-Disposition",
 			"attachment; filename="+newFname)
@@ -129,6 +143,16 @@ func decryptFunc(w http.ResponseWriter, req *http.Request) {
 				return
 			}
 		}
+
+		// Increment decrypted files count
+		mdb := db.CopyMainDB()
+		defer db.CloseDbSession(mdb.Session)
+		cConn := counts.NewCountConn(mdb)
+		err = cConn.AddCount("decrypt")
+		if err != nil {
+			log.Println("Failed to increment decrypt count", err)
+		}
+
 		cntLength := strconv.Itoa(len(decArr))
 		w.Header().Set("Content-Disposition",
 			"attachment; filename="+oriFname)
@@ -143,6 +167,56 @@ func decryptFunc(w http.ResponseWriter, req *http.Request) {
 	}
 }
 
+// Get encrypted and decrypted files counts
+func getBothCounts(w http.ResponseWriter, req *http.Request) {
+	mdb := db.CopyMainDB()
+	defer db.CloseDbSession(mdb.Session)
+
+	cConn := counts.NewCountConn(mdb)
+	cEnc, err := cConn.GetCount("encrypt")
+	if err != nil {
+		log.Println("Failed to increment decrypt count", err)
+	}
+	cDec, err := cConn.GetCount("decrypt")
+	if err != nil {
+		log.Println("Failed to increment decrypt count", err)
+	}
+	dataStr := fmt.Sprintf(`{"encrypt":%d,"decrypt":%d}`,
+		cEnc.Quantity, cDec.Quantity)
+	data := []byte(dataStr)
+
+	w.Header().Add("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	w.Write(data)
+}
+
 func redirectToHTTPS(w http.ResponseWriter, req *http.Request) {
 	http.Redirect(w, req, "https://"+req.Host+req.RequestURI, http.StatusMovedPermanently)
 }
+
+// ----------------- Helper Functions -----------------
+// ----------------- JSON Response -----------------
+func jsonResponse(resp interface{}, statusCode int, w http.ResponseWriter) {
+	js, err := json.Marshal(resp)
+	if err != nil {
+		log.Printf("Error occured creating JSON response: %v\n", err)
+		jsonErrorResponse("Error occured creating JSON response",
+			http.StatusInternalServerError, w)
+		return
+	}
+
+	w.Header().Add("Content-Type", "application/json")
+	w.WriteHeader(statusCode)
+	w.Write(js)
+}
+
+func jsonErrorResponse(errMsg string, statusCode int, w http.ResponseWriter) {
+	jsStr := fmt.Sprintf("{\"error\":\"%s\"}", errMsg)
+
+	w.Header().Add("Content-Type", "application/json")
+	w.WriteHeader(statusCode)
+	w.Write([]byte(jsStr))
+}
+
+// ----------------- End JSON Response -----------------
+// ----------------- End Helper Functions -----------------

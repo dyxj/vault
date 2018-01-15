@@ -1,6 +1,7 @@
 package counts_test
 
 import (
+	"fmt"
 	"gopkg.in/mgo.v2"
 	"testing"
 	"vault/db"
