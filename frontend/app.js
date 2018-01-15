@@ -3,8 +3,10 @@ document.addEventListener('DOMContentLoaded', function () {
         selector: '.background',
         maxParticles: 150,
         sizeVariations: 5,
-	speed:1
+        speed: 1
     });
+
+    getCounts();
 
     var eBtn = document.getElementById("enbtn");
     var dBtn = document.getElementById("debtn");
@@ -30,6 +32,20 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 });
 
+function getCounts() {
+    axios({
+        method: 'get',
+        url: '/getcounts',
+        responseType: 'json'
+    }).then(function (response) {        
+        $("#noFileEnc").val(response.data.encrypt)
+        $("#noFileDec").val(response.data.decrypt)
+    }).catch(function (error) {                
+        var errmsg = error.response.data;        
+        callAlert(errmsg);
+    });
+}
+
 function postEncrypt(data) {
     axios({
         method: 'post',
@@ -44,8 +60,8 @@ function postEncrypt(data) {
         document.body.appendChild(link);
         link.click();
     }).catch(function (error) {
-        var enc = new TextDecoder();        
-        var errmsg = enc.decode(error.response.data) ;
+        var enc = new TextDecoder();
+        var errmsg = enc.decode(error.response.data);
         console.log(errmsg);
         callAlert(errmsg);
     });
@@ -66,7 +82,7 @@ function postDecrypt(data) {
         link.click();
     }).catch(function (error) {
         var enc = new TextDecoder();
-        var errmsg = enc.decode(error.response.data) ;
+        var errmsg = enc.decode(error.response.data);
         console.log(errmsg);
         callAlert(errmsg);
     });

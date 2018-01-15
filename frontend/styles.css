@@ -12,6 +12,11 @@ body {
     z-index: 0;
 }
 
+.container {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
 .error-alert {
     position: absolute;
     width: 100%;
@@ -22,6 +27,9 @@ body {
 .card {
     z-index: 1;
     width: auto;
+}
+
+.card-enc {    
     /* min-width: 600px; */
     max-width: 600px;
 }

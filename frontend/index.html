@@ -14,10 +14,43 @@
         Alert!
     </div>
     <div class="container">
-        <div class="row align-items-center" style="height:100vh;">
-            <div class="col" style="text-align:center;">
+        <div class="row">
+            <!-- Details card -->
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">File Encryption Service</h5>
+                        <p class="card-text">Provides file encryption and decryption. <b>Does not store files.</b> 
+                        <br>File is encrypted upon upload and an encrypted file will be available for download.
+                        <br>To decrypt, upload encrypted file and enter password.
+                        </p>
+                        <div class="form-group row">
+                            <label for="noFileEnc" class="col-sm-4 col-form-label text-right">Number of files encrypted:</label>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control" id="noFileEnc" disabled>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="noFileEnc" class="col-sm-4 col-form-label text-right">Number of files decrypted:</label>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control" id="noFileDec" disabled>
+                            </div>
+                        </div>
+                        <p class="card-text">
+                            Source code avaiable on  
+                            <a href="#" class="btn btn-dark active" role="button" aria-pressed="true" disabled>Github</a>
+                            Soon!
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <!-- End Details Card -->
+        </div>
+        <br>
+        <div class="row">
+            <div class="col-md-12" style="text-align:center;">
                 <!-- Encrypt Card -->
-                <div class="card mx-auto">
+                <div class="card card-enc mx-auto">
                     <div class="card-body">
                         <h5 class="card-title">Upload a file to encrypt</h5>
                         <div class="form-group">
@@ -27,14 +60,14 @@
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label for="enKey1" class="col-sm-2 col-form-label">Password</label>
-                            <div class="col-sm-10">
+                            <label for="enKey1" class="col-sm-3 col-form-label">Password</label>
+                            <div class="col-sm-9">
                                 <input type="password" class="form-control" id="enKey1" placeholder="Password">
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label for="enKey2" class="col-sm-2 col-form-label">Confirm Password</label>
-                            <div class="col-sm-10">
+                            <label for="enKey2" class="col-sm-3 col-form-label">Confirm Password</label>
+                            <div class="col-sm-9">
                                 <input type="password" class="form-control" id="enKey2" placeholder="Confirm Password">
                             </div>
                         </div>
@@ -44,7 +77,7 @@
                 <!-- Encrypt Card End -->
                 <br>
                 <!-- Decrypt Card -->
-                <div class="card mx-auto">
+                <div class="card card-enc mx-auto">
                     <div class="card-body">
                         <h5 class="card-title">Upload a file to decrypt</h5>
                         <div class="form-group">
@@ -54,8 +87,8 @@
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label for="enKey1" class="col-sm-2 col-form-label">Password</label>
-                            <div class="col-sm-10">
+                            <label for="enKey1" class="col-sm-3 col-form-label">Password</label>
+                            <div class="col-sm-9">
                                 <input type="password" class="form-control" id="deKey1" placeholder="Password">
                             </div>
                         </div>

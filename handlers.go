@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"gopkg.in/mgo.v2"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -174,12 +175,22 @@ func getBothCounts(w http.ResponseWriter, req *http.Request) {
 
 	cConn := counts.NewCountConn(mdb)
 	cEnc, err := cConn.GetCount("encrypt")
-	if err != nil {
-		log.Println("Failed to increment decrypt count", err)
+	if err == mgo.ErrNotFound {
+		cEnc = &counts.Count{}
+	} else if err != nil {
+		log.Println("Failed to get encrypt count", err)
+		http.Error(w, "Failed to get encrypt count",
+			http.StatusInternalServerError)
+		return
 	}
 	cDec, err := cConn.GetCount("decrypt")
-	if err != nil {
-		log.Println("Failed to increment decrypt count", err)
+	if err == mgo.ErrNotFound {
+		cDec = &counts.Count{}
+	} else if err != nil {
+		log.Println("Failed to get decrypt count", err)
+		http.Error(w, "Failed to get decrypt count",
+			http.StatusInternalServerError)
+		return
 	}
 	dataStr := fmt.Sprintf(`{"encrypt":%d,"decrypt":%d}`,
 		cEnc.Quantity, cDec.Quantity)
