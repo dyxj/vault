@@ -3,3 +3,4 @@ debug.test
 *.code-workspace
 *.exe
 docker-compose.override.yml
+vault-autocert
