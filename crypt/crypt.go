@@ -29,7 +29,7 @@ func EncryptBytes(plaintext []byte, key []byte) ([]byte, error) {
 	return gcm.Seal(nonce, nonce, plaintext, nil), nil
 }
 
-// Decrypt :
+// DecryptBytes :
 func DecryptBytes(ciphertext []byte, key []byte) ([]byte, error) {
 	c, err := aes.NewCipher(key)
 	if err != nil {
@@ -50,6 +50,7 @@ func DecryptBytes(ciphertext []byte, key []byte) ([]byte, error) {
 	return gcm.Open(nil, nonce, ciphertext, nil)
 }
 
+// HashTo32Bytes :
 func HashTo32Bytes(input []byte) []byte {
 	data := sha256.Sum256(input)
 	return data[0:]

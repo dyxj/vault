@@ -47,7 +47,7 @@ function getCounts() {
 }
 
 function postEncrypt(data) {
-    $("#feModal").modal("show");
+    actionDisabled();
     axios({
         method: 'post',
         url: '/encrypt',
@@ -60,16 +60,18 @@ function postEncrypt(data) {
         link.setAttribute('download', response.headers["x-file-name"]);
         document.body.appendChild(link);
         link.click();
+        actionEnabled();
     }).catch(function (error) {
         var enc = new TextDecoder();
         var errmsg = enc.decode(error.response.data);
         console.log(errmsg);
         callAlert(errmsg);
+        actionEnabled();
     });
 }
 
 function postDecrypt(data) {
-    $("#feModal").modal("show");
+    actionDisabled();
     axios({
         method: 'post',
         url: '/decrypt',
@@ -82,13 +84,28 @@ function postDecrypt(data) {
         link.setAttribute('download', response.headers["x-file-name"]);
         document.body.appendChild(link);
         link.click();
+        actionEnabled();
     }).catch(function (error) {
         var enc = new TextDecoder();
         var errmsg = enc.decode(error.response.data);
         console.log(errmsg);
         callAlert(errmsg);
+        actionEnabled();
     });
 }
+
+function actionEnabled() {    
+    $("#feModal").modal("hide");
+    $("#enbtn").prop('disabled', false);
+    $("#debtn").prop('disabled', false);
+}
+
+function actionDisabled() {
+    $("#feModal").modal("show");
+    $("#enbtn").prop('disabled', true);
+    $("#debtn").prop('disabled', true);
+}
+
 
 function callAlert(text) {
     document.getElementById("error-alert").innerHTML = text;

@@ -3,16 +3,21 @@ services:
   webapp:
     build: ./
     volumes:       
-      - ./vault-autocert:/go/src/vault/vault-autocert
+      ## Used for production to store certs
+      # - ./vault-autocert:/go/src/vault/vault-autocert
+      ## Enable front end volume only for development
       - ./frontend:/go/src/vault/frontend
       # - E:/GoPaths/GoPath1/src/vault/vault-autocert:/go/src/vault/vault-autocert
       # - ~/dvolumes/vault/vault-autocert:/go/src/vault/vault-autocert
     ports:
+      # Bind desired ports, recommended to use 80 and 443 for prod      
       - 8080:80
       - 6060:443
     environment:
-      # dev or prod
+      ## dev or prod
       - VAULT_MAC_ENV=dev
+      ## white list domains for tls, comma seperated
+      - VAULT_URLS=file.darrenyxj.com
     depends_on:
       - 'mongody'
 
@@ -23,10 +28,12 @@ services:
       - MONGO_DATA_DIR=/data/db
       - MONGO_LOG_DIR=/dev/null
     # volumes:
-    #   - ./db-data/data/db:/data/db
+      ## Enable volumes to store data
+      # - ./db-data/data/db:/data/db
       # - ~/dvolumes/vault/data/db:/data/db
     expose:
       - 27017
+    ## Enable ports only for development purpose
     # ports:
     #   - 27017:27017
 

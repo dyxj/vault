@@ -7,6 +7,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"strings"
 	"vault/db"
 )
 
@@ -19,7 +20,7 @@ var (
 	macEnv = "dev"
 
 	// Domains to whitelist
-	domains = []string{"file.darrenyxj.com"}
+	domains = []string{}
 	// domains = []string{"darrenyxj.com", "file.darrenyxj.com"}
 )
 
@@ -74,5 +75,10 @@ func appInit() {
 	evMacEnv := os.Getenv("VAULT_MAC_ENV")
 	if evMacEnv != "" {
 		macEnv = evMacEnv
+	}
+	hostURLs := os.Getenv("VAULT_URLS")
+	if hostURLs != "" {
+		arrURL := strings.Split(hostURLs, ",")
+		domains = append(domains, arrURL...)
 	}
 }
