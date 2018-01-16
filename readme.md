@@ -10,10 +10,16 @@ To decrypt, upload encrypted file and enter password.
 Using docker is recommended. But can also be done without.
 * Docker is required.
 * Modify docker-compose.yml, example provided with some elaboration.
-* docker-compose up.
+* docker-compose up.  
+
+It would be good to create a compose file for prod and adding the -f flag to run. Check out [docker docs](https://docs.docker.com/compose/extends/#example-use-case) for more info.
 
 ## Documentation ##
-There are two services defined in the docker-compose. A webapp and a database(MongoDB).
+There are two services defined in docker-compose.yml. A webapp and a database(MongoDB).  
+* The webapp service is the Go web application.  
+    * Can be ran in dev and prod mode.
+    * When running in different modes do configure volumes accordingly.
+* Database used to store number of files encrypted and decrypted.
 
 
 ## Future Development ##

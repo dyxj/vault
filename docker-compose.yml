@@ -2,13 +2,11 @@ version: '3'
 services:
   webapp:
     build: ./
-    volumes:       
+    # volumes:       
       ## Used for production to store certs
       # - ./vault-autocert:/go/src/vault/vault-autocert
       ## Enable front end volume only for development
-      - ./frontend:/go/src/vault/frontend
-      # - E:/GoPaths/GoPath1/src/vault/vault-autocert:/go/src/vault/vault-autocert
-      # - ~/dvolumes/vault/vault-autocert:/go/src/vault/vault-autocert
+      # - ./frontend:/go/src/vault/frontend
     ports:
       # Bind desired ports, recommended to use 80 and 443 for prod      
       - 8080:80
@@ -21,7 +19,6 @@ services:
     depends_on:
       - 'mongody'
 
-  
   mongody:
     image: mongo:latest    
     environment:
@@ -29,11 +26,9 @@ services:
       - MONGO_LOG_DIR=/dev/null
     # volumes:
       ## Enable volumes to store data
-      # - ./db-data/data/db:/data/db
-      # - ~/dvolumes/vault/data/db:/data/db
+      # - ./db-data/data/db:/data/db      
     expose:
       - 27017
     ## Enable ports only for development purpose
     # ports:
     #   - 27017:27017
-

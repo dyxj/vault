@@ -21,7 +21,7 @@ var (
 
 	// Domains to whitelist
 	domains = []string{}
-	// domains = []string{"darrenyxj.com", "file.darrenyxj.com"}
+	// domains = []string{"file.darrenyxj.com"}
 )
 
 func main() {
