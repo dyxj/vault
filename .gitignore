@@ -5,3 +5,4 @@ debug.test
 docker-compose.override.yml
 docker-compose.prod.yml
 vault-autocert
+db-data
