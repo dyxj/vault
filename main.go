@@ -3,12 +3,13 @@ package main
 import (
 	"crypto/tls"
 	"fmt"
-	"golang.org/x/crypto/acme/autocert"
 	"log"
 	"net/http"
 	"os"
 	"strings"
 	"vault/db"
+
+	"golang.org/x/crypto/acme/autocert"
 )
 
 const (
@@ -22,6 +23,9 @@ var (
 	// Domains to whitelist
 	domains = []string{}
 	// domains = []string{"file.darrenyxj.com"}
+
+	// Default server name
+	serverName = "local-server"
 )
 
 func main() {
@@ -54,6 +58,7 @@ func main() {
 			Addr: ":443",
 			TLSConfig: &tls.Config{
 				GetCertificate: cm.GetCertificate,
+				ServerName:     serverName,
 			},
 		}
 
@@ -80,5 +85,9 @@ func appInit() {
 	if hostURLs != "" {
 		arrURL := strings.Split(hostURLs, ",")
 		domains = append(domains, arrURL...)
+	}
+	temp := os.Getenv("SERVER_NAME")
+	if temp != "" {
+		serverName = temp
 	}
 }
