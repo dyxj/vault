@@ -1,4 +1,4 @@
-FROM golang:1.8.5
+FROM golang:1.17
 
 ADD . /go/src/vault
 
